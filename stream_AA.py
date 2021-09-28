@@ -1,10 +1,3 @@
-# 동적자산배분전략 (lazyquant 참고)
-# 0. 데이터 불러오기 
-# 1. 모멘텀 값 생성하기 : 최근 모멘텀 값에 대한 가중치 높음, annualized 개념 
-# 2. 타깃 자산 선택하기 : Risk Asset on 일 경우, Risk Asset 중 최고값, 아닐 경우 Safe Asset 중 최고값 
-# 3. 수익률 생성하기 
-#.4. 성과 분석
-
 import pandas_datareader as pdr
 import pandas as pd
 from datetime import datetime, timedelta
