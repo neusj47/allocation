@@ -19,7 +19,7 @@ start_day = datetime(2019,6,30)
 end_day = datetime.today()
 
 RA = ['SPY','QQQ','VEA','EEM']
-SA = ['AGG','LQD','SCHB','DGRO']
+SA = ['AGG','LQD','SCHD','DGRO']
 
 # 0. 데이터 불러오기
 def get_price_data(RA, SA):
@@ -62,13 +62,17 @@ def select_asset(x, mom_col_list):
     asset['Price'] = x[asset['Signal']]
     return asset
 
-df = df[start_day:end_day].resample(rule='M').last()
-df[['Signal','Price']] = df.apply(lambda x: select_asset(x, mom_col_list), axis=1)
+df_result = df[start_day:end_day].resample(rule='M').last()
+df_m = df[start_day:end_day].resample(rule='M').last()
+df_result[['Signal','Price']] = df_result.apply(lambda x: select_asset(x, mom_col_list), axis=1)
+df_result = df_result.shift(1).fillna(0)
+df_result[RA + SA + mom_col_list]  = df_m[RA + SA + mom_col_list]
+df = df_result.drop(df_result.index[0])
 
 # 3. 수익률 생성하기
 
 rtn_col_list = [col + '_rtn' for col in df[RA + SA].columns]
-df[rtn_col_list] = df[RA + SA].pct_change()
+df[rtn_col_list] = df[RA + SA].pct_change().fillna(0)
 
 def get_return(df,rtn_col_list):
 
